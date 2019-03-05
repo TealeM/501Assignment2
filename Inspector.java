@@ -14,9 +14,9 @@ public class Inspector {
 	//inspect the current class
 	
 	inspectClass(obj, ObjClass, objectsToInspect);
+	inspectFields(obj, ObjClass,objectsToInspect, recursive);
 	inspectMethods(obj, ObjClass, objectsToInspect);
 	
-//	inspectFields(obj, ObjClass,objectsToInspect);
 	
 //	if(recursive)
 //	    inspectFieldClasses( obj, ObjClass, objectsToInspect, recursive);
@@ -26,63 +26,86 @@ public class Inspector {
 	private void inspectClass(Object obj, Class ObjClass, Vector objectsToInspect)
 	{
 		System.out.println("\nCLASS: "+ ObjClass.getName());
-		System.out.println("Immediate superclass: "+ ObjClass.getSuperclass().getName());
+		System.out.println("  - Immediate superclass: \n    "+ ObjClass.getSuperclass().getName());
 		if (ObjClass.getInterfaces().length == 0)
-			System.out.println("Does not implement any interfaces.");
+			System.out.println("  - Does not implement any interfaces.");
 		else {
-			System.out.println("Implements: ");
+			System.out.println("  - Implements: ");
 			for (int i=0; i< ObjClass.getInterfaces().length; i++)
 			{
-				System.out.println("\t   "+ObjClass.getInterfaces()[i].getName());
+				System.out.println("    "+ObjClass.getInterfaces()[i].getName());
 			}
 		}
-		
-		
 	}
 	
 	private void inspectMethods(Object obj, Class ObjClass, Vector objectsToInspect)
 	{
-		if(ObjClass.getDeclaredMethods().length >= 1)
+		if(ObjClass.getDeclaredMethods().length == 0)
+			System.out.println("No methods");
+		else
 		{
 			//Inspect each method
 			for (int i=0; i<ObjClass.getDeclaredMethods().length; i++)
 			{					
 				Method m = ObjClass.getDeclaredMethods()[i];
+				m.setAccessible(true);
 				
 				//Inspect and print name
-				m.setAccessible(true);
 				System.out.println("Method: "+m.getName());
 				
 				//Inspect and print exception types
 				if (m.getExceptionTypes().length == 0)
-					System.out.println("\tNo exceptions thrown.");
+					System.out.println("  - No exceptions thrown.");
 				else 
 				{
-					System.out.println("\tExceptions thrown: ");
+					System.out.println("  - Exceptions thrown: ");
 					for (int j=0; j<m.getExceptionTypes().length; j++)
 					{
 						Class eType = m.getExceptionTypes()[j];
-						System.out.println("\t   "+ eType.getName());
+						System.out.println("    "+ eType.getName());
 					}
 				}
 				//Inspect and print parameter types
 				if (m.getExceptionTypes().length == 0)
-					System.out.println("\tNo parameters.");
+					System.out.println("  - No parameters.");
 				else 
 				{
-					System.out.println("\tParameter types: ");
+					System.out.println("  - Parameter types: ");
 					for (int j=0; j<m.getParameterTypes().length; j++)
 					{
 						Class pType = m.getParameterTypes()[j];
-						System.out.println("\t   "+pType.getName());
+						System.out.println("    "+pType.getName());
 					}
 				}
 				//Inspect and print return type
-				System.out.println("\tReturn type: ");
-				System.out.println("\t   "+m.getReturnType().getName());
+				System.out.println("  - Return type: ");
+				System.out.println("    "+m.getReturnType().getName());
 				//Inspect and print modifiers
-				System.out.println("\tModifiers: ");
-				System.out.println("\t   "+Modifier.toString(m.getModifiers()));
+				System.out.println("  - Modifiers: ");
+				System.out.println("    "+Modifier.toString(m.getModifiers()));
+			}
+		}
+	}
+	
+	private void inspectFields(Object obj,Class ObjClass,Vector objectsToInspect, boolean rec)
+	{
+		if(ObjClass.getDeclaredFields().length == 0)
+			System.out.println("No fields.");
+		else
+		{
+			for (int i=0; i<ObjClass.getDeclaredFields().length; i++)
+			{
+				Field f = ObjClass.getDeclaredFields()[i];
+				f.setAccessible(true);
+				
+				//Inspect and print field name
+				System.out.println("Field: "+f.getName());
+				//Inspect and print field type
+				System.out.println("  - Type: ");
+				System.out.println("    "+ f.getType().getName());
+				//Inspect and print field modifiers
+				System.out.println("  - Modifiers: ");
+				System.out.println("    "+Modifier.toString(f.getModifiers()));
 			}
 		}
 	}
