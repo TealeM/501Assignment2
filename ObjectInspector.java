@@ -8,8 +8,8 @@ Created on:  Oct 23, 2005
 Last Updated: Oct 23, 2005
 
 ***********************************************************************
-If you are going to reproduce this code in any way for your asignment 
-rember to include my name at the top of the file toindicate where you
+If you are going to reproduce this code in any way for your assignment 
+remember to include my name at the top of the file to indicate where you
 got the original code from
 ***********************************************************************
 
@@ -40,8 +40,7 @@ public class ObjectInspector
 	   
     }
     //-----------------------------------------------------------
-    private void inspectFieldClasses(Object obj,Class ObjClass,
-				     Vector objectsToInspect,boolean recursive)
+    private void inspectFieldClasses(Object obj,Class ObjClass, Vector objectsToInspect,boolean recursive)
     {
 	
 	if(objectsToInspect.size() > 0 )
