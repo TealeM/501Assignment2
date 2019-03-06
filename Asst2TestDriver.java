@@ -63,7 +63,7 @@ public class Asst2TestDriver
 	    {
 		
 		e.printStackTrace();
-		throw new Exception("unable to compleatly run test");
+		throw new Exception("unable to completly run test");
 	    
 	    }
     }
