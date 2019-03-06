@@ -11,15 +11,14 @@ public class Inspector {
 		objectsAlreadyInspected.addElement(obj);
 		Class ObjClass = obj.getClass();
 	
-		System.out.println("inside inspector: " + obj + " (recursive = "+recursive+")");
+		System.out.println("\nInside inspector: " + obj + " (recursive = "+recursive+")");
 		
 		inspectClass(obj, ObjClass);
-//		inspectConstructors(obj, ObjClass);
+		inspectConstructors(obj, ObjClass);
 		inspectMethods(obj, ObjClass);
 		inspectFields(obj, ObjClass, recursive);
 		
 		System.out.println();
-		   
     }
 	
 	/********************************************************************************************/
@@ -41,11 +40,35 @@ public class Inspector {
 	}
 	
 	/********************************************************************************************/
-/*	private void inspectConstructors(Object obj, Class ObjClass)
+	private void inspectConstructors(Object obj, Class ObjClass)
 	{
-		
+		for (int i=0; i<ObjClass.getDeclaredConstructors().length; i++)
+		{					
+			Constructor c = ObjClass.getDeclaredConstructors()[i];
+			c.setAccessible(true);
+			
+			//Inspect 
+			System.out.print("\nConstructor: ");
+			
+			//Inspect and print parameter types
+			if (c.getParameterTypes().length == 0)
+				System.out.print("\n  - No parameters.");
+			else 
+			{
+				System.out.print("\n  - Parameter types: ");
+				for (int j=0; j<c.getParameterTypes().length; j++)
+				{
+					Class pType = c.getParameterTypes()[j];
+					System.out.print(pType.getName());
+					if (i < (c.getParameterTypes().length)-1)
+						System.out.print(", ");
+				}
+			}
+			//Inspect and print modifiers
+			System.out.print("\n  - Modifiers: "+ Modifier.toString(c.getModifiers()));
+		}
 	}
-*/	
+
 	/********************************************************************************************/
 	private void inspectMethods(Object obj, Class ObjClass)
 	{
@@ -67,7 +90,7 @@ public class Inspector {
 					System.out.print("  - No exceptions thrown.");
 				else 
 				{
-					System.out.print("\n  - Exceptions thrown: ");
+					System.out.print("  - Exceptions thrown: ");
 					for (int j=0; j<m.getExceptionTypes().length; j++)
 					{
 						Class eType = m.getExceptionTypes()[j];
@@ -77,7 +100,7 @@ public class Inspector {
 					}
 				}
 				//Inspect and print parameter types
-				if (m.getExceptionTypes().length == 0)
+				if (m.getParameterTypes().length == 0)
 					System.out.print("\n  - No parameters.");
 				else 
 				{
