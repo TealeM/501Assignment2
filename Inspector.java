@@ -1,3 +1,16 @@
+/* Teale Masrani (UCID: 3000 0053)
+ * CPSC501 Assignment 2
+ * T04
+
+ * The purpose of this class is to provide an inspector which, when inspect() is called,
+ * will reflectively inspect an object and print all information to standard output.
+ * It will inspect all details of all constructors, methods, fields, and field values within the object of interest. 
+ * It will also traverse the hierarchy of an object to similarly inspect the superclasses and superinterfaces.
+
+ * In the inspect() method, if recursive is set to true, it will also recursively inspect any object
+ * it comes across when inspecting field values. If recursive is set to false, it will merely print the name
+ * of the object and its identity hash code as the field value, without inspecting it further.
+ */
 import java.util.*;
 import java.lang.reflect.*;
 
