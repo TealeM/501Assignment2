@@ -19,10 +19,9 @@ public abstract class ClassC extends ClassD implements InterfaceA
 	return 1;
     }
 
-   
-    public abstract void func3(int a);
-
-
+    public abstract void func3(int a);    
+    
+    
     private ClassA val2 = new ClassA(100);
     private ClassA val3;
     private ClassA val4;
