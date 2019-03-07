@@ -8,16 +8,12 @@ public class Inspector {
 	
 	public void inspect(Object obj, boolean recursive) throws IllegalArgumentException, IllegalAccessException, InstantiationException
     {
-		obj = (Object) obj;
-		
 		Class ObjClass = obj.getClass();
 	
 		System.out.println("\nInside inspector: " + obj + " (recursive = "+recursive+")");
 		
-		inspectClass(obj, ObjClass);
-		inspectConstructors(obj, ObjClass);
-		inspectMethods(obj, ObjClass);
-		inspectFields(obj, ObjClass, recursive);
+		getDetails(obj, ObjClass, recursive);
+		
 		System.out.print("\n\n------ FINISHED INSPECTING "+ObjClass.getName()+" ------");
 		//Traverse hierarchy
 		if(ObjClass.getSuperclass() != null)
@@ -31,15 +27,13 @@ public class Inspector {
 		System.out.println();
 		
     }
-	public void inspectAbstract(Object obj, Class ObjClass, boolean recursive) throws IllegalArgumentException, IllegalAccessException, InstantiationException
+	private void inspectAbstract(Object obj, Class ObjClass, boolean recursive) throws IllegalArgumentException, IllegalAccessException, InstantiationException
     {
 		System.out.println("\nInside inspector: " + ObjClass + " (recursive = "+recursive+")");
 		
-		inspectClass(null, ObjClass);
-		inspectConstructors(null, ObjClass);
-		inspectMethods(null, ObjClass);
-		inspectFields(obj, ObjClass, recursive);
+		getDetails(obj, ObjClass, recursive);
 		System.out.print("\n\n------ FINISHED INSPECTING "+ObjClass.getName()+" ------");
+		
 		//Traverse hierarchy
 		if(ObjClass.getSuperclass() != null)
 			inspectSuperclass(obj, ObjClass, recursive);
@@ -52,31 +46,16 @@ public class Inspector {
 		System.out.println();
 		
     }
-
-	public void inspectInterface(Object obj, Class ObjClass, boolean recursive) throws IllegalArgumentException, IllegalAccessException, InstantiationException
-    {
-		System.out.print("\nInside inspector: " + obj + " (recursive = "+recursive+")");
-		
-		inspectClass(null, ObjClass);
-		try { inspectConstructors(null, ObjClass);}
-		catch (Exception e) { }
-		inspectMethods(null, ObjClass);
-		inspectFields(obj, ObjClass, recursive);
-		System.out.print("\n\n------ FINISHED INSPECTING "+ObjClass.getName()+" ------");
-		//Traverse hierarchy
-		if(ObjClass.getSuperclass() != null)
-			inspectSuperclass(obj, ObjClass, recursive);
-		if(ObjClass.getInterfaces().length > 0)
-			inspectSuperInterfaces(obj, ObjClass, recursive);
-		
-		objectsAlreadyInspected.addElement(ObjClass);
-		objectsAlreadyInspected.addElement(obj);
-
-		System.out.println();
-		
-    }
+	
+	private void getDetails(Object obj, Class ObjClass, boolean recursive) throws IllegalAccessException, IllegalArgumentException, InstantiationException	
+	{
+		getDetailsForClass(obj, ObjClass);
+		getDetailsForConstructors(obj, ObjClass);
+		getDetailsForMethods(obj, ObjClass);
+		getDetailsForFields(obj, ObjClass, recursive);
+	}
 	/********************************************************************************************/
-	private void inspectClass(Object obj, Class ObjClass)
+	private void getDetailsForClass(Object obj, Class ObjClass)
 	{
 		//Inspect and print class name
 		System.out.println("\nCLASS: "+ ObjClass.getSimpleName());
@@ -105,8 +84,7 @@ public class Inspector {
 		}
 	}
 	 
-	/********************************************************************************************/
-	private void inspectConstructors(Object obj, Class ObjClass)
+	private void getDetailsForConstructors(Object obj, Class ObjClass)
 	{
 		for (int i=0; i<ObjClass.getDeclaredConstructors().length; i++)
 		{
@@ -138,8 +116,7 @@ public class Inspector {
 		}
 	}
  
-	/********************************************************************************************/
-	private void inspectMethods(Object obj, Class ObjClass)
+	private void getDetailsForMethods(Object obj, Class ObjClass)
 	{
 		if(ObjClass.getDeclaredMethods().length == 0)
 			System.out.print("\nNo methods.");
@@ -195,8 +172,7 @@ public class Inspector {
 		}
 	}
 	
-	/********************************************************************************************/
-	private void inspectFields(Object obj,Class ObjClass, boolean rec) throws IllegalAccessException, IllegalArgumentException, InstantiationException
+	private void getDetailsForFields(Object obj,Class ObjClass, boolean rec) throws IllegalAccessException, IllegalArgumentException, InstantiationException
 	{
 		if(ObjClass.getDeclaredFields().length == 0)
 			System.out.println("\nNo fields.");
@@ -275,7 +251,7 @@ public class Inspector {
 			{
 				objectsAlreadyInspected.addElement(superInterface);
 				objectsAlreadyInspected.addElement(superInterface.getClass());
-				inspectInterface(superInterface, superInterface.getClass(), rec);
+				inspect(superInterface, rec);
 			}
  			else {System.out.print("\n------ Already inspected this object ------");}
 	 	} 
